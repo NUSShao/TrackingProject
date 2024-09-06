@@ -65,7 +65,7 @@ def generate_launch_description():
     target_diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["diff_controller"],
+        arguments=["target_diff_controller"],
         # !!! namespace added !!!
         namespace='target',
     )
@@ -73,7 +73,7 @@ def generate_launch_description():
     target_joint_broad_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_broadcaster"],
+        arguments=["target_joint_broadcaster"],
         # !!! namespace added !!!
         namespace='target',
     )

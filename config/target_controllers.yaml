@@ -6,14 +6,14 @@ target:
       # This one will automatically propagate use_sim_time to all the following controllers
       use_sim_time: true
 
-      diff_controller:
+      target_diff_controller:
         type: diff_drive_controller/DiffDriveController
 
-      joint_broadcaster:
+      target_joint_broadcaster:
         type: joint_state_broadcaster/JointStateBroadcaster
 # !!! namespace added !!!
 target:
-  diff_controller:
+  target_diff_controller:
     ros__parameters:
       # Set to a higher rate than the update rate to ensure we can catch each loop
       publish_rate: 50.0
