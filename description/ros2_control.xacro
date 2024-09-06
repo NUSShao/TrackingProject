@@ -36,6 +36,10 @@
 
     <gazebo>
         <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+            <ros>
+                <namespace>robot</namespace>
+                <remapping>/robot_description:=/robot_description_full</remapping>
+            </ros>
             <parameters>/home/nusshao/dev_ws/src/mobile_bot/config/my_controllers.yaml</parameters>
         </plugin>
     </gazebo>
