@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 # Change the project name to your own here
-project(mobile_bot)
+project(tracking_project)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)

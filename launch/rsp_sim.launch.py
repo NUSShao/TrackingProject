@@ -11,7 +11,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
      # Include the robot_state_publisher launch file
-    package_name='mobile_bot'
+    package_name='tracking_project'
 
     rsp = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
@@ -28,13 +28,23 @@ def generate_launch_description():
     )
 
     # Run the spawner node from the gazebo_ros package.
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
+    spawn_entity_robot = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic','/robot/robot_description',
                                    '-entity', 'my_bot',
                                    ],
                                    output='screen',
                                    #    !!! namespace added !!!
                                    namespace='robot',)
+    
+    # Run the spawner node from the gazebo_ros package.
+    spawn_entity_target = Node(package='gazebo_ros', executable='spawn_entity.py',
+                        arguments=['-topic','/target/robot_description',
+                                   '-entity', 'target',
+                                   '-x', '2.0'
+                                   ],
+                                   output='screen',
+                                   #    !!! namespace added !!!
+                                   namespace='target',)
 
     diff_drive_spawner = Node(
         package="controller_manager",
@@ -51,14 +61,33 @@ def generate_launch_description():
         # !!! namespace added !!!
         namespace='robot',
     )
+
+    target_diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_controller"],
+        # !!! namespace added !!!
+        namespace='target',
+    )
+
+    target_joint_broad_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_broadcaster"],
+        # !!! namespace added !!!
+        namespace='target',
+    )
     
     # Launch everything!
     return LaunchDescription([
         # SetEnvironmentVariable('GAZEBO_MODEL_PATH', '/home/nusshao/.gazebo/models'),
         rsp,
         gazebo,
-        spawn_entity,
-        diff_drive_spawner,
-        joint_broad_spawner,
+        # spawn_entity_robot,
+        spawn_entity_target,
+        # diff_drive_spawner,
+        # joint_broad_spawner,
+        target_diff_drive_spawner,
+        target_joint_broad_spawner,
     ])
 
