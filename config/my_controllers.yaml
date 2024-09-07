@@ -2,21 +2,21 @@
 robot:
   controller_manager:
     ros__parameters:
-      update_rate: 30
+      update_rate: 100
       # This one will automatically propagate use_sim_time to all the following controllers
       use_sim_time: true
 
-      diff_controller:
+      robot_diff_controller:
         type: diff_drive_controller/DiffDriveController
 
-      joint_broadcaster:
+      robot_joint_broadcaster:
         type: joint_state_broadcaster/JointStateBroadcaster
 # !!! namespace added !!!
 robot:
-  diff_controller:
+  robot_diff_controller:
     ros__parameters:
       # Set to a higher rate than the update rate to ensure we can catch each loop
-      publish_rate: 50.0
+      publish_rate: 100.0
 
       base_frame_id: base_link
 

@@ -2,7 +2,7 @@
 target:
   controller_manager:
     ros__parameters:
-      update_rate: 30
+      update_rate: 100
       # This one will automatically propagate use_sim_time to all the following controllers
       use_sim_time: true
 
@@ -16,7 +16,7 @@ target:
   target_diff_controller:
     ros__parameters:
       # Set to a higher rate than the update rate to ensure we can catch each loop
-      publish_rate: 50.0
+      publish_rate: 100.0
 
       base_frame_id: base_link
 

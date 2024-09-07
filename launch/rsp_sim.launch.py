@@ -33,8 +33,8 @@ def generate_launch_description():
                                    '-entity', 'my_bot',
                                    ],
                                    output='screen',
-                                   #    !!! namespace added !!!
-                                   namespace='robot',)
+                                   remappings=[("/robot_state_publisher", "/robot/robot_state_publisher")]
+                                   )
     
     # Run the spawner node from the gazebo_ros package.
     spawn_entity_target = Node(package='gazebo_ros', executable='spawn_entity.py',
@@ -43,39 +43,47 @@ def generate_launch_description():
                                    '-x', '2.0'
                                    ],
                                    output='screen',
-                                   #    !!! namespace added !!!
-                                   namespace='target',)
+                                   remappings=[("/robot_state_publisher", "/target/robot_state_publisher")],
+                                   )
 
     diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["diff_controller"],
         # !!! namespace added !!!
         namespace='robot',
+        name="robot_spawn_controller_joint_state_broadcaster",
+        arguments=["robot_diff_controller", "--controller-manager", "/robot/controller_manager"],
+        output="screen",
     )
-
+    
     joint_broad_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_broadcaster"],
         # !!! namespace added !!!
         namespace='robot',
+        name="robot_spawn_controller_joint_state_broadcaster",
+        arguments=["robot_joint_broadcaster", "--controller-manager", "/robot/controller_manager"],
+        output="screen",
     )
 
     target_diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["target_diff_controller"],
         # !!! namespace added !!!
         namespace='target',
+        name="target_spawn_controller_joint_state_broadcaster",
+        arguments=["target_diff_controller", "--controller-manager", "/target/controller_manager"],
+        output="screen",
     )
 
     target_joint_broad_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["target_joint_broadcaster"],
         # !!! namespace added !!!
         namespace='target',
+        name="target_spawn_controller_joint_state_broadcaster",
+        arguments=["target_joint_broadcaster", "--controller-manager", "/target/controller_manager"],
+        output="screen",
     )
     
     # Launch everything!
@@ -83,11 +91,14 @@ def generate_launch_description():
         # SetEnvironmentVariable('GAZEBO_MODEL_PATH', '/home/nusshao/.gazebo/models'),
         rsp,
         gazebo,
-        # spawn_entity_robot,
+
+        spawn_entity_robot,
         spawn_entity_target,
-        # diff_drive_spawner,
-        # joint_broad_spawner,
-        target_diff_drive_spawner,
+
         target_joint_broad_spawner,
+        target_diff_drive_spawner,
+
+        joint_broad_spawner,
+        diff_drive_spawner,
     ])
 
