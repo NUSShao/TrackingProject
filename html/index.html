@@ -6,9 +6,9 @@
     <title>Robot Controller</title>
     <style>
         button {
-            width: 200px;
+            width: 150px;
             height: 100px;
-            font-size: 24px;
+            font-size: 22px;
             margin: 20px;
         }
     </style>
@@ -18,15 +18,17 @@
 <body>
     <h1>Control Dual Robot</h1>
 
+    <button id="robot_left">robot_Left</button>
     <button id="robot_forward">robot_Forward</button>
     <button id="robot_backward">robot_Backward</button>
-    <button id="robot_left">robot_Left</button>
     <button id="robot_right">robot_Right</button>
 
+    <button id="target_left">target_Left</button>
     <button id="target_forward">target_Forward</button>
     <button id="target_backward">target_Backward</button>
-    <button id="target_left">target_Left</button>
     <button id="target_right">target_Right</button>
+
+    <button id="saveImageBtn">Save Image</button>
 
     <script type="text/javascript">
         // 连接到rosbridge WebSocket服务器
@@ -90,6 +92,10 @@
             target_cmdVel.publish(twist);
         }
 
+        document.getElementById('robot_left').addEventListener('touchstart', function(event) {
+            robot_handleTouchStart(event, 0.0, 1.0);
+        });
+
         document.getElementById('robot_forward').addEventListener('touchstart', function(event) {
             robot_handleTouchStart(event, 0.5, 0.0);
         });
@@ -98,12 +104,12 @@
             robot_handleTouchStart(event, -0.5, 0.0);
         });
 
-        document.getElementById('robot_left').addEventListener('touchstart', function(event) {
-            robot_handleTouchStart(event, 0.0, 1.0);
-        });
-
         document.getElementById('robot_right').addEventListener('touchstart', function(event) {
             robot_handleTouchStart(event, 0.0, -1.0);
+        });
+
+        document.getElementById('target_left').addEventListener('touchstart', function(event) {
+            target_handleTouchStart(event, 0.0, 1.0);
         });
 
         document.getElementById('target_forward').addEventListener('touchstart', function(event) {
@@ -114,15 +120,33 @@
             target_handleTouchStart(event, -0.5, 0.0);
         });
 
-        document.getElementById('target_left').addEventListener('touchstart', function(event) {
-            target_handleTouchStart(event, 0.0, 1.0);
-        });
-
         document.getElementById('target_right').addEventListener('touchstart', function(event) {
             target_handleTouchStart(event, 0.0, -1.0);
         });
 
+        // 添加图像保存按钮的功能，支持触屏和点击
+        function saveImage() {
+            fetch('http://localhost:5000/save_image')
+                .then(response => response.json())
+                .then(data => console.log(data.message))
+                .catch(error => console.error('Error:', error));
+        }
+
+        // 绑定事件到保存图片按钮，支持touchstart和click
+        document.getElementById("saveImageBtn").addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            saveImage();
+        });
+
+        document.getElementById("saveImageBtn").addEventListener("click", function(event) {
+            saveImage();
+        });
+
         // Fallback for click event (non-touch devices)
+        document.getElementById('robot_left').addEventListener('click', function() {
+            robot_handleTouchStart(event, 0.0, 1.0);
+        });
+
         document.getElementById('robot_forward').addEventListener('click', function() {
             robot_handleTouchStart(event, 0.5, 0.0);
         });
@@ -131,25 +155,20 @@
             robot_handleTouchStart(event, -0.5, 0.0);
         });
 
-        document.getElementById('robot_left').addEventListener('click', function() {
-            robot_handleTouchStart(event, 0.0, 1.0);
-        });
-
         document.getElementById('robot_right').addEventListener('click', function() {
             robot_handleTouchStart(event, 0.0, -1.0);
         });
 
-        // Fallback for click event (non-touch devices)
+        document.getElementById('target_left').addEventListener('click', function() {
+            target_handleTouchStart(event, 0.0, 1.0);
+        });
+
         document.getElementById('target_forward').addEventListener('click', function() {
             target_handleTouchStart(event, 0.5, 0.0);
         });
 
         document.getElementById('target_backward').addEventListener('click', function() {
             target_handleTouchStart(event, -0.5, 0.0);
-        });
-
-        document.getElementById('target_left').addEventListener('click', function() {
-            target_handleTouchStart(event, 0.0, 1.0);
         });
 
         document.getElementById('target_right').addEventListener('click', function() {

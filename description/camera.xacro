@@ -60,6 +60,9 @@
             </camera>
             <!-- gazebo camera control plugin -->
             <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <ros>
+                    <namespace>robot</namespace>
+                </ros>
                 <frame_name>camera_link_optical</frame_name>
             </plugin>
 
