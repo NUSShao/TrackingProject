@@ -85,6 +85,13 @@ def generate_launch_description():
         arguments=["target_joint_broadcaster", "--controller-manager", "/target/controller_manager"],
         output="screen",
     )
+
+    yolo_detector_spawner = Node(
+        package="tracking_project",
+        executable="ros2_yolov8_node.py",
+        name="yolo_detector_node",
+        output="screen",
+    )
     
     # Launch everything!
     return LaunchDescription([
@@ -100,5 +107,7 @@ def generate_launch_description():
 
         joint_broad_spawner,
         diff_drive_spawner,
+
+        yolo_detector_spawner,
     ])
 

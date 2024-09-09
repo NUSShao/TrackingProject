@@ -37,5 +37,13 @@ install(
   DIRECTORY config description launch worlds
   DESTINATION share/${PROJECT_NAME}
 )
+# sudo chmod +x /path/to/your/file after the installation!!!
+install(
+  PROGRAMS
+  scripts/publisher_node.py
+  scripts/subscriber_node.py
+  scripts/ros2_yolov8_node.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()
