@@ -1,0 +1,17 @@
+# Change to your own path !!!
+
+train: /home/nusshao/dev_ws/src/tracking_project/yolo_training/datasets/train/images
+val: /home/nusshao/dev_ws/src/tracking_project/yolo_training/datasets/valid/images
+test: /home/nusshao/dev_ws/src/tracking_project/yolo_training/datasets/test/images
+
+nc: 1
+names: ['target']
+
+
+# Dataset made by roboflow
+# roboflow:
+#   workspace: trackingproject
+#   project: tracking_project
+#   version: 1
+#   license: CC BY 4.0
+#   url: https://universe.roboflow.com/trackingproject/tracking_project/dataset/1
