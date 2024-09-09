@@ -6,7 +6,6 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 from ultralytics import YOLO
-import numpy as np
 
 class Yolov8Node(Node):
     def __init__(self):

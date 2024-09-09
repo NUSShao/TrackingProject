@@ -108,6 +108,6 @@ def generate_launch_description():
         joint_broad_spawner,
         diff_drive_spawner,
 
-        yolo_detector_spawner,
+        # yolo_detector_spawner,
     ])
 

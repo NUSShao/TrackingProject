@@ -43,6 +43,7 @@ install(
   scripts/publisher_node.py
   scripts/subscriber_node.py
   scripts/ros2_yolov8_node.py
+  scripts/tracking_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
