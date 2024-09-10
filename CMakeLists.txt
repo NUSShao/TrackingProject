@@ -44,6 +44,7 @@ install(
   scripts/subscriber_node.py
   scripts/ros2_yolov8_node.py
   scripts/tracking_node.py
+  scripts/laserscan_map_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

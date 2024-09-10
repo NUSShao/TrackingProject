@@ -68,11 +68,18 @@ class TrackingNode(Node):
             # 发布控制命令
             self.track_target(offset_x_angle, distance_to_target)
 
-        # 可视化检测结果
-        annotated_frame = results[0].plot()
-        annotated_frame = self.display_offset_on_image(annotated_frame, offset_x_angle, distance_to_target)
-        cv2.imshow("YOLO Detection", annotated_frame)
-        cv2.waitKey(1)
+            # 可视化检测结果
+            annotated_frame = results[0].plot()
+            annotated_frame = self.display_offset_on_image(annotated_frame, offset_x_angle, distance_to_target)
+            cv2.imshow("YOLO Detection", annotated_frame)
+            cv2.waitKey(1)
+
+        else:
+            self.get_logger().info("No target detected. Stopping robot.")
+            self.stop_robot()
+            cv2.imshow("YOLO Detection", cv_image)
+            cv2.waitKey(1)
+
 
     def estimate_distance(self, target_width_in_image):
         # 估算目标距离的函数（根据目标的实际大小和图像中的大小进行估算）
@@ -101,6 +108,13 @@ class TrackingNode(Node):
             twist_msg.angular.z = -0.01 * offset_x_angle
 
         self.cmd_vel_publisher.publish(twist_msg)
+
+    def stop_robot(self):
+        # 没有目标时，停止移动
+        twist = Twist()
+        twist.linear.x = 0.0
+        twist.angular.z = 0.0
+        self.cmd_vel_publisher.publish(twist)
     
     def display_offset_on_image(self, image, offset_x_angle, distance_to_target):
         """在图像上显示角度偏移和距离信息"""
