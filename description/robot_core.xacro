@@ -42,8 +42,9 @@
     <link name="chassis_link">
 
         <visual>
-            <geometry>
-                <box size="0.3 0.3 0.15" />
+            <geometry>  <!-- <color sid="emission"> has to be equal to <color sid="diffuse"> -->
+                <mesh filename='/home/nusshao/dev_ws/src/tracking_project/description/chassis.dae' scale='1 1 1'/>
+                <!-- <box size="0.3 0.3 0.15" /> -->
             </geometry>
             <material name="white" />
             <origin xyz="0.15 0 0.075" />
@@ -86,7 +87,8 @@
 
         <visual>
             <geometry>
-                <cylinder radius="0.05" length="0.04" />
+                <mesh filename='/home/nusshao/dev_ws/src/tracking_project/description/wheel.dae' scale='1 1 1'/>
+                <!-- <cylinder radius="0.05" length="0.04" /> -->
             </geometry>
             <material name="blue" />
         </visual>
@@ -104,7 +106,7 @@
     </link>
 
     <gazebo reference="left_wheel_link">
-        <material>Gazebo/Blue</material>
+        <!-- <material>Gazebo/Blue</material> -->
     </gazebo>
 
         <!-- right wheel link -->
@@ -127,7 +129,8 @@
 
             <visual>
                 <geometry>
-                    <cylinder radius="0.05" length="0.04" />
+                    <mesh filename='/home/nusshao/dev_ws/src/tracking_project/description/wheel.dae' scale='1 1 1'/>
+                    <!-- <cylinder radius="0.05" length="0.04" /> -->
                 </geometry>
                 <material name="blue" />
             </visual>
@@ -145,7 +148,7 @@
         </link>
 
         <gazebo reference="right_wheel_link">
-            <material>Gazebo/Blue</material>
+            <!-- <material>Gazebo/Blue</material> -->
         </gazebo>
 
         <!-- caster wheel link -->

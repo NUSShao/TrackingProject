@@ -13,7 +13,8 @@
 
         <visual>
             <geometry>
-                <box size="0.01 0.03 0.03" />
+                <mesh filename='/home/nusshao/dev_ws/src/tracking_project/description/camera.dae' scale='3 3 3'/>
+                <!-- <box size="0.01 0.03 0.03" /> -->
             </geometry>
             <material name="red" />
         </visual>
@@ -34,7 +35,7 @@
     <gazebo reference="camera_link">
         
         <!-- Color definition in Gazebo -->
-        <material>Gazebo/Red</material>
+        <!-- <material>Gazebo/Red</material> -->
         <!-- Sensor tag for camera -->
         <sensor name="camera" type="camera">
 
