@@ -3,7 +3,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, Vector3
 from cv_bridge import CvBridge
 from ultralytics import YOLO
 import cv2
@@ -28,6 +28,11 @@ class TrackingNode(Node):
         # 发布控制命令到cmd_vel话题
         self.cmd_vel_publisher = self.create_publisher(
             Twist, '/robot/robot_diff_controller/cmd_vel_unstamped', 10
+        )
+
+        # 发布相对位置到 /robot/relative_position
+        self.relative_position_publisher = self.create_publisher(
+            Vector3, '/robot/relative_position', 10
         )
 
         # 加载YOLOV8模型
@@ -74,11 +79,24 @@ class TrackingNode(Node):
             cv2.imshow("YOLO Detection", annotated_frame)
             cv2.waitKey(1)
 
+            # 发布相对位置到 /robot/relative_position
+            relative_position_msg = Vector3()
+            relative_position_msg.x = distance_to_target
+            relative_position_msg.y = offset_x_angle
+            relative_position_msg.z = 0.0  # Z轴不用
+            self.relative_position_publisher.publish(relative_position_msg)
+
         else:
             self.get_logger().info("No target detected. Stopping robot.")
             self.stop_robot()
             cv2.imshow("YOLO Detection", cv_image)
             cv2.waitKey(1)
+            # 发布相对位置到 /robot/relative_position
+            relative_position_msg = Vector3()
+            relative_position_msg.x = 99999 # 检测不到，将距离和角度偏差都设为99999
+            relative_position_msg.y = 99999
+            relative_position_msg.z = 0.0  # Z轴不用
+            self.relative_position_publisher.publish(relative_position_msg)
 
 
     def estimate_distance(self, target_width_in_image):

@@ -2,8 +2,9 @@
 
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import LaserScan
+from sensor_msgs.msg import LaserScan, Image
 from math import cos, sin
+from cv_bridge import CvBridge
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -16,6 +17,12 @@ class LaserScanMapper(Node):
             '/robot/scan',
             self.lidar_callback,
             10
+        )
+        # 用于将grid map数组转换为Image格式
+        self.bridge = CvBridge()
+        # 发布绘制出的grid map
+        self.grid_map_publisher = self.create_publisher(
+            Image, '/robot/grid_map', 10
         )
         # 初始化图像显示窗口
         self.grid_size = 100
@@ -38,7 +45,7 @@ class LaserScanMapper(Node):
         ranges = scan_msg.ranges
 
         # 初始化栅格地图
-        self.grid_map = np.zeros((self.grid_size, self.grid_size))
+        self.grid_map = np.zeros((self.grid_size, self.grid_size), dtype=np.uint8)
 
         # 原点坐标（通常是小车中心）
         origin_x = self.grid_size // 2
@@ -66,6 +73,11 @@ class LaserScanMapper(Node):
         self.im.set_data(self.grid_map)
         plt.draw()
         plt.pause(0.01)  # 刷新图像
+
+        # 将100x100的栅格地图转换为Image格式的消息，并发布到一个topic中
+        grid_map_msg = self.bridge.cv2_to_imgmsg(self.grid_map, encoding="mono8")
+        self.grid_map_publisher.publish(grid_map_msg)
+
 
 
 def main(args=None):
