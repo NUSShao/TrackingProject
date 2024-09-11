@@ -45,6 +45,8 @@ install(
   scripts/ros2_yolov8_node.py
   scripts/tracking_node.py
   scripts/laserscan_map_node.py
+  scripts/trail_node.py
+  scripts/DWA_tracking_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

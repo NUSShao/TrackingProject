@@ -43,6 +43,9 @@ class TrackingNode(Node):
         self.image_width = 640
         self.image_height = 480
 
+        # 初始化角度偏移量
+        self.last_offset_x_angle = 0.0
+
         self.get_logger().info('Tracking Node has been started')
 
     def listener_callback(self, msg):
@@ -66,12 +69,15 @@ class TrackingNode(Node):
             offset_x = target_center_x - (self.image_width / 2)
             offset_x_angle = (offset_x / self.image_width) * self.horizontal_fov
 
+            # 保存当前的偏移量
+            self.last_offset_x_angle = offset_x_angle
+
             # 估算目标距离
-            target_width_in_image = x2 - x1
+            target_width_in_image = y2 - y1
             distance_to_target = self.estimate_distance(target_width_in_image)
 
-            # 发布控制命令
-            self.track_target(offset_x_angle, distance_to_target)
+            # 发布控制命令 !!!!!!!!Cancled
+            # self.track_target(offset_x_angle, distance_to_target)
 
             # 可视化检测结果
             annotated_frame = results[0].plot()
@@ -87,14 +93,14 @@ class TrackingNode(Node):
             self.relative_position_publisher.publish(relative_position_msg)
 
         else:
-            self.get_logger().info("No target detected. Stopping robot.")
-            self.stop_robot()
+            self.get_logger().info("No target detected.")
+            # self.stop_robot()
             cv2.imshow("YOLO Detection", cv_image)
             cv2.waitKey(1)
             # 发布相对位置到 /robot/relative_position
             relative_position_msg = Vector3()
-            relative_position_msg.x = 99999 # 检测不到，将距离和角度偏差都设为99999
-            relative_position_msg.y = 99999
+            relative_position_msg.x = 99999.0 # 检测不到，将距离设为99999，角度保持直行不变
+            relative_position_msg.y = self.last_offset_x_angle
             relative_position_msg.z = 0.0  # Z轴不用
             self.relative_position_publisher.publish(relative_position_msg)
 

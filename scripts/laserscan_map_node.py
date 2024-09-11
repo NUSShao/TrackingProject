@@ -24,16 +24,16 @@ class LaserScanMapper(Node):
         self.grid_map_publisher = self.create_publisher(
             Image, '/robot/grid_map', 10
         )
-        # 初始化图像显示窗口
+        # # 初始化图像显示窗口
         self.grid_size = 100
         self.resolution = 0.05  # 固定分辨率，每个栅格代表 5cm
-        self.fig, self.ax = plt.subplots()
+        # self.fig, self.ax = plt.subplots()
         self.grid_map = np.zeros((self.grid_size, self.grid_size))
 
-        # 设置绘图参数，使用手动设置的vmin和vmax
-        self.im = self.ax.imshow(self.grid_map, cmap='hot', origin='lower', vmin=0, vmax=1)
-        plt.ion()  # 开启交互模式
-        plt.show()
+        # # 设置绘图参数，使用手动设置的vmin和vmax
+        # self.im = self.ax.imshow(self.grid_map, cmap='hot', origin='lower', vmin=0, vmax=1)
+        # plt.ion()  # 开启交互模式
+        # plt.show()
 
     def lidar_callback(self, scan_msg):
         # 获取Laserscan中有效信息
@@ -63,16 +63,16 @@ class LaserScanMapper(Node):
             x = distance * cos(angle) 
             y = distance * sin(angle)
             grid_x = int(x / self.resolution) + origin_x
-            grid_y = -int(y / self.resolution) + origin_y # 左右镜像回来
+            grid_y = -int(y / self.resolution) + origin_y 
 
             # 确保不超出地图范围
             if 0 <= grid_x < self.grid_size and 0 <= grid_y < self.grid_size:
-                self.grid_map[grid_x][grid_y] = 1  # 表示有障碍物
+                self.grid_map[grid_y][grid_x] = 1  # 表示有障碍物
 
-        # 更新图像
-        self.im.set_data(self.grid_map)
-        plt.draw()
-        plt.pause(0.01)  # 刷新图像
+        # # 更新图像
+        # self.im.set_data(self.grid_map)
+        # plt.draw()
+        # plt.pause(0.01)  # 刷新图像
 
         # 将100x100的栅格地图转换为Image格式的消息，并发布到一个topic中
         grid_map_msg = self.bridge.cv2_to_imgmsg(self.grid_map, encoding="mono8")
